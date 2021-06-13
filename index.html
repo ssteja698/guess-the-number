@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                color: rgb(48, 56, 77);
+                background-color: rgb(241, 240, 240);
+            }
+            .header {
+                transition: width 4s, height 4s, transform 4s;
+            }
+            .header h1 {
+                width: fit-content;
+                color: rgb(131, 158, 55);
+                margin: 0 0 50px;
+            }
+            .header:hover {
+                transform: rotateY(360deg);
+            }
+            .main {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                margin-top: 100px;
+            }
+            .form {
+                display: flex;
+                width: 250px;
+                margin: auto auto 50px;
+                justify-content: space-around;
+                align-items: center;
+            }
+            button {
+                width: 100px;
+                height: 35px;
+                font-size: 20px;
+                border-radius: 5px;
+                border: 1px solid lightgrey;
+                cursor: pointer;
+            }
+            button[type='submit'] {
+                height: 33px;
+                color: white;
+                background-color: rgb(48, 161, 73);
+            }
+            button:hover {
+                border: none;
+                background-color: rgb(39, 131, 59);
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+            input[type=number], select {
+                font-size: 18px;
+                width: 180px;
+                margin-right: 20px;
+                padding: 5px 10px;
+                border-top: none;
+                border-left: none;
+                border-right: none;
+                border-bottom: 1px solid #ccc;
+                box-sizing: border-box;
+                background-color: rgb(241, 240, 240);
+            }
+            input:focus {
+                outline: none;
+                border-bottom: 2px solid rgb(102, 87, 240);
+            }
+            input:placeholder-shown + #submit {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            #finalResult {
+                border: 1px solid lightgray;
+                margin: auto;
+                width: fit-content;
+                padding: 5px;
+                border-radius: 5px;
+                background-image: linear-gradient(to bottom right, rgb(145, 241, 241), rgb(138, 253, 138));
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                display: none;
+            }
+        </style>
+        <title>Guess the Number</title>
+        <script type="text/javascript">
+            function checkNum() {
+                var num = document.getElementById("num").value;
+
+                if (num === '' || typeof num === 'null') {
+                    alert('Enter a number');
+                } else {
+                    num = Number(num);
+                    if (num > 100 || num < 0) {
+                        document.getElementById("finalResult").innerText = "Don't go too far from the actual number 😅";
+                    } else if (Math.abs(num - 50) <= 10 && num !== 50) {
+                        document.getElementById("finalResult").innerText = "Come on, you have come nearer to the actual number ✌🏻";
+                    } else if (num < 50) {
+                        document.getElementById("finalResult").innerText = "Sorry, the number you guessed is lesser than the actual number 😕";
+                    } else if (num > 50) {
+                        document.getElementById("finalResult").innerText = "Sorry, the number you guessed is greater than the actual number 😕";
+                    } else {
+                        document.getElementById("finalResult").innerText = "Congrats, you have guessed the answer correctly 🥳";
+                    }
+                }
+            }
+            function submit() {
+                var num = document.getElementById("num").value;
+                if (num === '' || typeof num === 'null') {
+                    alert('Enter a number');
+                } else {
+                    document.getElementById("finalResult").style="display: block";
+                }
+            }
+            function onKeyDown(e) {
+                var unicode = e.keyCode ? e.keyCode : e.charCode;
+                if (unicode === 13) {
+                    submit();
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="main" onkeydown="onKeyDown(event)">
+            <div class="header">
+                <h1>Guess the Number</h1>
+            </div>
+            <div class="form">
+                <input autofocus type="number" id="num" name="num" placeholder="Enter a Number" onchange="checkNum()"/>
+                <button id="submit" type="submit" onclick="submit()">Submit</button>
+            </div>
+            <div id="finalResult"></div>
+        </div>
+    </body>
+</html>
