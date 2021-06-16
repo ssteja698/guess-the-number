@@ -7,3 +7,5 @@
 ### This project has two specialities:
 * This takes in the speech input and checks if that number is equal to the actual number.
 * This contains a custom designed (with just CSS) mic icon.
+
+### Try implementing this and give it a thumbs up!
