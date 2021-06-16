@@ -8,6 +8,6 @@
 * This takes in the speech input and checks if that number is equal to the actual number.
 * This contains a custom designed (with just CSS) mic icon.
 
-### Note: Speech input works in Chrome browser only. Also that I wrote it supporting desktop screens only
+### Note: Speech input works in Chrome browser only. Also that as of now, I wrote it supporting desktop screens only
 
 ### Try implementing this and give it a thumbs up!
