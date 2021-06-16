@@ -1,3 +1,5 @@
+<!-- Speech to Text Reference: https://www.studytonight.com/post/javascript-speech-recognition-example-speech-to-text -->
+<!-- Mic Icon Styles Reference: https://codesandbox.io/s/mic-icon-d0frc -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,6 +7,7 @@
             body {
                 color: rgb(48, 56, 77);
                 background-color: rgb(241, 240, 240);
+                font-family: Helvetica, sans-serif;
             }
             .header {
                 transition: width 4s, height 4s, transform 4s;
@@ -25,9 +28,8 @@
             }
             .form {
                 display: flex;
-                width: 250px;
-                margin: auto auto 50px;
-                justify-content: space-around;
+                margin: auto auto 30px;
+                justify-content: space-between;
                 align-items: center;
             }
             button {
@@ -38,8 +40,8 @@
                 border: 1px solid lightgrey;
                 cursor: pointer;
             }
-            button[type='submit'] {
-                height: 33px;
+            button#submit {
+                height: 40px;
                 color: white;
                 background-color: rgb(48, 161, 73);
             }
@@ -49,8 +51,8 @@
                 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             }
             input[type=number], select {
-                font-size: 18px;
-                width: 180px;
+                font-size: 20px;
+                width: 200px;
                 margin-right: 20px;
                 padding: 5px 10px;
                 border-top: none;
@@ -78,44 +80,51 @@
                 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
                 display: none;
             }
+            .mic {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                margin-right: 20px;
+            }
+            .upper {
+                background-color: black;
+                height: 20px;
+                width: 10px;
+                border-radius: 5px;
+            }
+            .lower {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                transform: translateY(-5px);
+            }
+            .semi-circle {
+                height: 8px;
+                width: 16px;
+                border-radius: 0 0 150px 150px;
+                border: 3px solid black;
+                border-top: none;
+            }
+            .vertical-line {
+                height: 5px;
+                width: 3px;
+                background-color: black;
+                transform: translateX(-0.5px);
+            }
+            .base {
+                width: 15px;
+                height: 3px;
+                background-color: black;
+                border-radius: 20px;
+                transform: translateX(-0.3px);
+            }
+            #action {
+                font-size: x-large;
+            }
         </style>
         <title>Guess the Number</title>
-        <script type="text/javascript">
-            function checkNum() {
-                var num = document.getElementById("num").value;
-
-                if (num === '' || typeof num === 'null') {
-                    alert('Enter a number');
-                } else {
-                    num = Number(num);
-                    if (num > 100 || num < 0) {
-                        document.getElementById("finalResult").innerText = "Don't go too far from the actual number 😅";
-                    } else if (Math.abs(num - 50) <= 10 && num !== 50) {
-                        document.getElementById("finalResult").innerText = "Come on, you have come nearer to the actual number ✌🏻";
-                    } else if (num < 50) {
-                        document.getElementById("finalResult").innerText = "Sorry, the number you guessed is lesser than the actual number 😕";
-                    } else if (num > 50) {
-                        document.getElementById("finalResult").innerText = "Sorry, the number you guessed is greater than the actual number 😕";
-                    } else {
-                        document.getElementById("finalResult").innerText = "Congrats, you have guessed the answer correctly 🥳";
-                    }
-                }
-            }
-            function submit() {
-                var num = document.getElementById("num").value;
-                if (num === '' || typeof num === 'null') {
-                    alert('Enter a number');
-                } else {
-                    document.getElementById("finalResult").style="display: block";
-                }
-            }
-            function onKeyDown(e) {
-                var unicode = e.keyCode ? e.keyCode : e.charCode;
-                if (unicode === 13) {
-                    submit();
-                }
-            }
-        </script>
     </head>
     <body>
         <div class="main" onkeydown="onKeyDown(event)">
@@ -124,9 +133,96 @@
             </div>
             <div class="form">
                 <input autofocus type="number" id="num" name="num" placeholder="Enter a Number" onchange="checkNum()"/>
+                <div class="mic" onclick="runSpeechRecognition()">
+                    <div class="upper"></div>
+                    <div class="lower">
+                      <div class="semi-circle"></div>
+                      <div class="vertical-line"></div>
+                      <div class="base"></div>
+                    </div>
+                </div>
                 <button id="submit" type="submit" onclick="submit()">Submit</button>
             </div>
+            <p><span id="action"></span></p>
             <div id="finalResult"></div>
         </div>
+
+        <script type="text/javascript">
+            const numToGuess = Math.floor(Math.random() * 100);
+            console.table({ "Number to guess": numToGuess });
+
+            function checkNum() {
+                let num = document.getElementById("num").value;
+
+                if (num === '' || typeof num === 'null') {
+                    alert('Enter a number');
+                } else {
+                    num = Number(num);
+                    document.getElementById("action").style = "display: none";
+                    if (num > (numToGuess + 100) || num < (numToGuess - 100)) {
+                        document.getElementById("finalResult").innerText = "Don't go too far from the actual number 😅";
+                    } else if (Math.abs(num - numToGuess) <= 10 && num !== numToGuess) {
+                        document.getElementById("finalResult").innerText = "Come on, you have come nearer to the actual number ✌🏻";
+                    } else if (num < numToGuess) {
+                        document.getElementById("finalResult").innerText = "Sorry, the number you guessed is lesser than the actual number 😕";
+                    } else if (num > numToGuess) {
+                        document.getElementById("finalResult").innerText = "Sorry, the number you guessed is greater than the actual number 😕";
+                    } else {
+                        document.getElementById("finalResult").innerText = "Congrats, you have guessed the answer correctly 🥳";
+                    }
+                }
+            }
+
+            function submit() {
+                const num = document.getElementById("num").value;
+                if (num === '' || typeof num === 'null') {
+                    alert('Enter a number');
+                } else {
+                    document.getElementById("finalResult").style="display: block";
+                    checkNum();
+                }
+            }
+
+            function onKeyDown(e) {
+                const unicode = e.keyCode ? e.keyCode : e.charCode;
+                if (unicode === 13) {
+                    submit();
+                }
+            }
+
+            function runSpeechRecognition() {
+		        var output = document.getElementById("output");
+		        var action = document.getElementById("action");
+                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+                var recognition = new SpeechRecognition();
+
+                recognition.onstart = function() {
+                    document.getElementById("finalResult").style = "display: none";
+                    action.style = "display: block;"
+                    action.innerHTML = "<small>Start Speaking...</small>";
+                };
+
+                recognition.onspeechend = function() {
+                    action.innerHTML = "<small>Stopped Listening</small>";
+                    recognition.stop();
+                }
+
+                recognition.onresult = function(event) {
+                    var transcript = event.results[0][0].transcript;
+                    if (isNaN(Number(transcript))) {
+                        alert("Input a Number");
+                    } else {
+                        var input = document.getElementById("num");
+                        input.focus();
+                        var val = input.value;
+                        input.value = '';
+                        input.value = Number(transcript);
+                        submit();
+                    }
+                };
+
+                recognition.start();
+	        }
+        </script>
     </body>
 </html>
